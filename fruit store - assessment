@@ -1,0 +1,115 @@
+def main_menu():
+    """Main menu for selecting Manager or Customer."""
+    while True:
+        print("\nWelcome to the Fruit Store")
+        print("1. Manager")
+        print("2. Customer")
+        print("3. Exit")
+        
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            manager_menu()
+        elif choice == '2':
+            customer_menu()
+        elif choice == '3':
+            print("Exiting Fruit Store. Thank you!")
+            break
+        else:
+            print("Invalid choice! Please enter a number between 1 and 3.")
+
+fruit_stock = {}
+
+def manager_menu():
+    """Manager menu for managing fruit stock."""
+    while True:
+        print("\nManager Menu")
+        print("1. Add Fruit")
+        print("2. View Stock")
+        print("3. Update Stock")
+        print("4. Back to Main Menu")
+        
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            add_fruit()
+        elif choice == '2':
+            view_stock()
+        elif choice == '3':
+            update_stock()
+        elif choice == '4':
+            break
+        else:
+            print("Invalid choice! Please enter a number between 1 and 4.")
+
+def customer_menu():
+    """Customer menu for buying fruits."""
+    while True:
+        view_stock()
+        print("\nCustomer Menu")
+        print("1. Buy Fruit")
+        print("2. Back to Main Menu")
+        
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            buy_fruit()
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice! Please enter a number between 1 and 2.")
+
+def add_fruit():
+    fruit = input("Enter fruit name: ").strip().lower()
+    try:
+        quantity = int(input("Enter quantity: "))
+        price = float(input("Enter price per unit: "))
+        
+        index = len(fruit_stock) + 1
+        fruit_stock[index] = {'name': fruit, 'quantity': quantity, 'price': price}
+        
+        print("Fruit added successfully!")
+    except ValueError:
+        print("Invalid input! Please enter numbers for quantity and price.")
+
+def view_stock():
+    if not fruit_stock:
+        print("No stock available.")
+    else:
+        print("\nAvailable Stock:")
+        print("Index | Fruit | Quantity | Price")
+        print("--------------------------------")
+        for index, details in fruit_stock.items():
+            print(f"{index} | {details['name'].capitalize()} | {details['quantity']} | {details['price']}")
+
+def update_stock():
+    view_stock()
+    try:
+        index = int(input("Enter fruit index to update: "))
+        if index in fruit_stock:
+            quantity = int(input("Enter new quantity: "))
+            price = float(input("Enter new price: "))
+            fruit_stock[index]['quantity'] = quantity
+            fruit_stock[index]['price'] = price
+            print("Stock updated successfully!")
+        else:
+            print("Invalid index!")
+    except ValueError:
+        print("Invalid input! Please enter valid numbers.")
+
+def buy_fruit():
+    view_stock()
+    try:
+        index = int(input("Enter fruit index to buy: "))
+        if index in fruit_stock:
+            quantity = int(input("Enter quantity: "))
+            if quantity <= fruit_stock[index]['quantity']:
+                total_price = quantity * fruit_stock[index]['price']
+                fruit_stock[index]['quantity'] -= quantity
+                print(f"Purchase successful! Total Price: {total_price}")
+            else:
+                print("Not enough stock available.")
+        else:
+            print("Invalid index!")
+    except ValueError:
+        print("Invalid input! Please enter a valid number.")
+
+if __name__ == "__main__":
+    main_menu()
